@@ -1,0 +1,30 @@
+/* Site-wide colors. Infima (the classic theme's CSS) reads these variables. */
+:root {
+  --ifm-color-primary: #3b5bdb;
+  --ifm-color-primary-dark: #3251d0;
+  --ifm-color-primary-darker: #2f4cc4;
+  --ifm-color-primary-darkest: #273fa2;
+  --ifm-color-primary-light: #536fdf;
+  --ifm-color-primary-lighter: #5f79e1;
+  --ifm-color-primary-lightest: #8296e8;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #8ea2f0;
+  --ifm-color-primary-dark: #7590ed;
+  --ifm-color-primary-darker: #6886eb;
+  --ifm-color-primary-darkest: #4168e5;
+  --ifm-color-primary-light: #a7b6f3;
+  --ifm-color-primary-lighter: #b4c0f5;
+  --ifm-color-primary-lightest: #dae0fa;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+/* Wide harness tables scroll inside themselves instead of the page. */
+.markdown table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
