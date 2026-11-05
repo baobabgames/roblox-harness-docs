@@ -13,12 +13,21 @@ npm run serve    # serve that build locally
 
 | Section | Source | Route |
 |---|---|---|
-| Guide | `website/docs/` (written for people) | `/docs` |
-| Systems | `../docs/*.md`, read in place | `/systems` |
-| AI guides | `../.claude/guides/*.md`, read in place | `/ai-guides` |
+| Guide | `docs/` (written for people) | `/docs` |
+| Systems | `harness/docs/*.md`, copied from the harness | `/systems` |
+| AI guides | `harness/.claude/guides/*.md`, copied from the harness | `/ai-guides` |
 
-Systems and AI guides are never copied: edit the harness files and the site follows. Their repo-path links (`../src/...`, `../.claude/guides/...`) are rewritten for the site by `src/remark/repoLinks.ts`: to the matching site page, or to the file on GitHub.
+`harness/` holds copies of the [roblox-harness](https://github.com/baobabgames/roblox-harness) Markdown, kept in the harness's own layout. Don't edit them here: change the harness, then refresh the copies and commit them:
+
+```bash
+npm run sync-harness                      # from ../roblox-harness
+npm run sync-harness -- path/to/harness   # from another checkout
+```
+
+Their repo-path links (`../src/...`, `../.claude/guides/...`) are rewritten for the site by `src/remark/repoLinks.ts`: to the matching site page, or to the file in the harness repo on GitHub.
 
 `.md` files are plain Markdown (`markdown.format: 'detect'`), so `{ }` and `<Name>` in the harness docs are safe. Use `.mdx` only for pages that need React.
 
-New games made from the template don't keep this folder: `/setup` removes it.
+## Deploying
+
+Every push to `main` builds the site and publishes it to GitHub Pages at https://baobabgames.github.io/roblox-harness-docs/ (`.github/workflows/deploy.yml`). You can also run it by hand from the Actions tab. The repo's **Settings → Pages → Source** must be set to **GitHub Actions**.

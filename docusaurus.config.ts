@@ -9,20 +9,26 @@ import repoLinks from './src/remark/repoLinks';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const repo = 'https://github.com/baobabgames/roblox-harness';
+const siteRepo = 'https://github.com/baobabgames/roblox-harness-docs';
+
+// Copies of the harness's docs/*.md and .claude/guides/*.md, which the Systems
+// and AI guides sections show. Refresh them with `npm run sync-harness`.
+// Same layout as the harness repo, so repoLinks maps paths the same way.
+const harnessRoot = path.join(__dirname, 'harness');
 
 // Rewrites the harness Markdown's repo-path links for the site (see the file).
 const repoLinksPlugin = [
   repoLinks,
   {
-    repoRoot: path.resolve(__dirname, '..'),
+    repoRoot: harnessRoot,
     repoUrl: repo,
     sections: {docs: '/systems', '.claude/guides': '/ai-guides'},
   },
 ];
 
-// The Systems and AI guides sections read the harness's own Markdown in place
-// (../docs and ../.claude/guides), so they never go out of date. These
-// "edit" links point at those files, not at copies in website/.
+// The Systems and AI guides sections show copies of the harness's Markdown
+// (harness/docs and harness/.claude/guides). These "edit" links point at the
+// originals in the harness repo, which is where changes belong.
 const editIn =
   (folder: string) =>
   ({docPath}: {docPath: string}) =>
@@ -48,11 +54,12 @@ const config: Config = {
     v4: true,
   },
 
-  // Set these when the site gets a real home (GitHub Pages, Vercel...).
+  // GitHub Pages: https://baobabgames.github.io/roblox-harness-docs/
   url: 'https://baobabgames.github.io',
-  baseUrl: '/',
+  baseUrl: '/roblox-harness-docs/',
   organizationName: 'baobabgames',
-  projectName: 'roblox-harness',
+  projectName: 'roblox-harness-docs',
+  trailingSlash: false,
 
   // Links from the harness Markdown to files outside the site (src/,
   // .claude/skills/...) are sent to GitHub by src/remark/repoLinks.ts, so a
@@ -80,10 +87,10 @@ const config: Config = {
       'classic',
       {
         docs: {
-          // Hand-written pages for people: website/docs
+          // Hand-written pages for people: docs/
           routeBasePath: 'docs',
           sidebarPath: './sidebars.ts',
-          editUrl: `${repo}/edit/main/website/`,
+          editUrl: `${siteRepo}/edit/main/`,
         },
         blog: false,
         theme: {
@@ -99,7 +106,7 @@ const config: Config = {
       {
         // The template's built-in systems: docs/*.md (not GDDs or change docs)
         id: 'systems',
-        path: '../docs',
+        path: path.join(harnessRoot, 'docs'),
         routeBasePath: 'systems',
         include: ['*.md'],
         exclude: ['ROBLOX_AI_TEMPLATE_GUIDE.md'],
@@ -114,7 +121,7 @@ const config: Config = {
       {
         // The rules Claude follows: .claude/guides/*.md
         id: 'guides',
-        path: '../.claude/guides',
+        path: path.join(harnessRoot, '.claude', 'guides'),
         routeBasePath: 'ai-guides',
         include: ['*.md'],
         sidebarPath: './sidebars.guides.ts',
